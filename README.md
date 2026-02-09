@@ -1,0 +1,56 @@
+# Brent Oil Prices Change Point Analysis
+
+## Project Overview
+
+This project analyzes historical Brent oil prices (1987-2022) to identify significant structural breaks using **Bayesian Change Point Detection**. The goal is to correlate these statistical changes with major geopolitical and economic events, providing actionable insights for investors and policymakers.
+
+## Repository Structure
+
+```
+├── data/                   # Data files (BrentOilPrices.csv, events_data.csv)
+├── notebooks/              # Jupyter notebooks for analysis
+│   ├── 01_time_series_properties.ipynb
+│   └── 02_change_point_model.ipynb
+├── src/                    # Source code modules
+│   ├── data_loader.py      # Data ingestion and cleaning
+│   └── analysis.py         # Statistical tests and visualization
+├── .gitignore              # Git ignore file
+├── requirements.txt        # Python dependencies
+└── README.md               # Project documentation
+```
+
+## Setup Instructions
+
+1.  **Clone the repository**:
+
+    ```bash
+    git clone <repository_url>
+    cd <repository_name>
+    ```
+
+2.  **Install Dependencies**:
+    It is recommended to use a virtual environment.
+
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+    _Note: For PyMC on Windows, using Conda is often easier: `conda install -c conda-forge pymc arviz`_
+
+3.  **Data**:
+    Ensure `BrentOilPrices.csv` is placed in the `data/` directory.
+
+## Running the Analysis
+
+The analysis is divided into two main notebooks:
+
+1.  **`01_time_series_properties.ipynb`**: Exploratory Data Analysis, Trend, Stationarity (ADF), and Volatility analysis.
+2.  **`02_change_point_model.ipynb`**: Implementation of the Bayesian Change Point model using PyMC to detect and quantify structural breaks.
+
+Run the notebooks using Jupyter:
+
+```bash
+jupyter lab
+```
