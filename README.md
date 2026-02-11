@@ -1,88 +1,93 @@
-# Brent Oil Prices Change Point Analysis
+# Brent Oil Prices: Bayesian Change Point Analysis
 
-## Project Overview
+This repository provides a comprehensive analysis of Brent oil price volatility (1987-2022) using **Bayesian Change Point Detection**. It correlates statistical structural breaks with major geopolitical and economic events through an interactive dashboard.
 
-This project analyzes historical Brent oil prices (1987-2022) to identify significant structural breaks using **Bayesian Change Point Detection**. The goal is to correlate these statistical changes with major geopolitical and economic events, providing actionable insights for investors and policymakers.
+## Methodology & Rationale
+
+### 1. Bayesian Change Point Model
+
+We employ a **Poisson-like switch function** implemented in **PyMC** to identify when the underlying statistical properties of oil price returns change.
+
+- **Choice of Model**: Unlike simple moving averages, a Bayesian model allows us to quantify uncertainty (posterior distribution) for the exact day a structural break occurred.
+- **Log-Returns**: We analyze `log(Price_t / Price_{t-1})` instead of raw prices to handle non-stationarity and focus on relative volatility shifts.
+- **Switch Function Logic**:
+  ```python
+  mu = pm.math.switch(tau >= idx, mu_post, mu_pre)
+  ```
+  Where `tau` is the discrete latent variable representing the change point index, and `mu_pre`/`mu_post` are the mean returns before and after the shift.
+- **Sampling**: We use **Markov Chain Monte Carlo (MCMC)** with 500 tuning steps and 500 samples to derive the posterior distribution of the change point.
+
+### 2. Event Correlation Structure
+
+The event dataset (`data/events_data.csv`) was structured to include:
+
+- **Political Decisions**: OPEC+ production cuts, sanctions (Iran, Russia).
+- **Conflicts**: Gulf War, Iraq War, Arab Spring.
+- **Economic Shocks**: 2008 Financial Crisis, 2020 COVID-19 demand collapse.
+
+**Selection Criteria**: Events were included if they had a documented global impact on oil supply or demand and occurred within proximity to high-volatility periods identified in the EDA.
+
+---
 
 ## Repository Structure
 
 ```
-├── data/                   # Data files (BrentOilPrices.csv, events_data.csv, analysis_results.json)
-├── dashboard/              # Interactive Dashboard (Flask + React)
-│   ├── backend/            # Flask API
-│   └── frontend/           # React App
-├── scripts/                # Helper scripts (results generation)
-├── notebooks/              # Jupyter notebooks for analysis
-│   ├── 01_time_series_properties.ipynb
-│   └── 02_change_point_model.ipynb
-├── src/                    # Source code modules
-│   ├── data_loader.py      # Data ingestion and cleaning
-│   └── analysis.py         # Statistical tests and visualization
-├── .gitignore              # Git ignore file
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
+├── data/                   # BrentOilPrices.csv, events_data.csv, analysis_results.json
+├── dashboard/              # Interactive Dashboard component
+│   ├── backend/            # Flask API (serving pre-computed MCMC results)
+│   └── frontend/           # React App (Vite + Recharts)
+├── scripts/                # Utility: generate_analysis_results.py (runs MCMC)
+├── notebooks/              # Research & EDA
+│   ├── 01_time_series_properties.ipynb (Stationarity & Volatility)
+│   └── 02_change_point_model.ipynb (Bayesian Implementation)
+├── src/                    # Shared modules (data_loader.py)
+├── requirements.txt        # Backend dependencies
+└── README.md               # Main documentation
 ```
 
-## Setup Instructions
+---
 
-1.  **Clone the repository**:
+## Setup & Execution Guide
 
-    ```bash
-    git clone <repository_url>
-    cd <repository_name>
-    ```
+### Phase 1: Environment Setup
 
-2.  **Install Dependencies**:
-    It is recommended to use a virtual environment.
+1. **Clone & Venv**:
+   ```bash
+   git clone <repo_url> && cd <repo_dir>
+   python -m venv venv && source venv/bin/activate # Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    pip install -r requirements.txt
-    ```
+### Phase 2: Running Analysis
 
-    _Note: For PyMC on Windows, using Conda is often easier: `conda install -c conda-forge pymc arviz`_
+1. **Explore Notebooks**: Open `notebooks/01_time_series_properties.ipynb` to see the statistical tests.
+2. **Generate Database**: Run the Bayesian model to update `analysis_results.json`:
+   ```bash
+   python scripts/generate_analysis_results.py
+   ```
 
-3.  **Data**:
-    Ensure `BrentOilPrices.csv` is placed in the `data/` directory.
+### Phase 3: Launching Interactive Dashboard
 
-## Running the Analysis
-
-The analysis is divided into two main notebooks:
-
-1.  **`01_time_series_properties.ipynb`**: Exploratory Data Analysis, Trend, Stationarity (ADF), and Volatility analysis.
-2.  **`02_change_point_model.ipynb`**: Implementation of the Bayesian Change Point model using PyMC to detect and quantify structural breaks.
-
-Run the notebooks using Jupyter:
+**Backend (Flask)**:
 
 ```bash
-jupyter lab
+cd dashboard/backend
+pip install -r requirements.txt
+python app.py
 ```
 
-## Interactive Dashboard
-
-The project includes a premium interactive dashboard to visualize the analysis results.
-
-### New Features (Updated)
-
-- **Date Range Filters**: Explicitly select start and end dates to focus your analysis on specific time periods.
-- **Event-Change Correlation**: Geopolitical events are now marked directly on the price chart. Events occurring within 30 days of the detected structural change point are highlighted in amber.
-- **Proximity Tracking**: The event table now includes a "Proximity" column, showing exactly how many days separate an event from the detected change point.
-- **Responsive Design**: The dashboard is built with a mobile-first approach using CSS Grid and Flexbox, ensuring it looks great on desktops, tablets, and phones.
-
-### 1. Generate Results
-
-Before running the dashboard, ensure the analysis results are generated:
+**Frontend (React)**:
 
 ```bash
-python scripts/generate_analysis_results.py
+cd dashboard/frontend
+npm install
+npm run dev
 ```
 
-### 2. Run Dashboard
+---
 
-Detailed instructions are available in [dashboard/README.md](dashboard/README.md).
+## Interactive Features
 
-**Quick Start:**
-
-- **Backend**: `cd dashboard/backend && python app.py`
-- **Frontend**: `cd dashboard/frontend && npm run dev`
+- **PriceChart**: Hover over markers to see event details. The red line indicates the median change point from the Bayesian posterior.
+- **Filters**: Dynamically focus on specific geopolitical eras (e.g., 2008-2012 or 2019-2022).
+- **Correlation Display**: The table automatically highlights events occurring within 30 days of the detected change point to provide instant causal context.
