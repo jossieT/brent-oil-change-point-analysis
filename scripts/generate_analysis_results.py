@@ -38,16 +38,30 @@ def generate_results():
     tau_mean = int(np.mean(tau_posterior))
     change_date = df.index[tau_mean]
     
+    # Calculate Quantitative Metrics
+    mu1_mean = float(trace.posterior['mu1'].mean())
+    mu2_mean = float(trace.posterior['mu2'].mean())
+    sigma_mean = float(trace.posterior['sigma'].mean())
+    
+    # Calculate pre/post standard deviation independently for extra detail
+    vol_pre = float(df['Log_Returns'].iloc[:tau_mean].std())
+    vol_post = float(df['Log_Returns'].iloc[tau_mean:].std())
+    
     print(f"Detected Change Point: {change_date.date()}")
+    print(f"Mean Shift: {mu1_mean:.5f} -> {mu2_mean:.5f}")
     
     # Save Results
     results = {
         "change_point": {
             "index": int(tau_mean),
             "date": change_date.strftime('%Y-%m-%d'),
-            "mu1": float(trace.posterior['mu1'].mean()),
-            "mu2": float(trace.posterior['mu2'].mean()),
-            "sigma": float(trace.posterior['sigma'].mean())
+            "mu1": mu1_mean,
+            "mu2": mu2_mean,
+            "sigma": sigma_mean,
+            "vol_pre": vol_pre,
+            "vol_post": vol_post,
+            "abs_mu_shift": abs(mu2_mean - mu1_mean),
+            "pct_vol_change": ((vol_post - vol_pre) / vol_pre * 100) if vol_pre != 0 else 0
         }
     }
     

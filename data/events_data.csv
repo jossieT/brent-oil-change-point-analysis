@@ -2,9 +2,11 @@ Date,Event,Description,Type
 1990-08-02,Gulf War Begins,Iraq invades Kuwait leading to a sharp spike in oil prices due to supply fears.,Geopolitical
 1991-01-17,Operation Desert Storm,Coalition forces begin combat operations; prices drop as quick victory becomes anticipated.,Geopolitical
 1997-07-02,Asian Financial Crisis,Currency crisis starting in Thailand leads to demand shock and lower oil prices.,Economic
+1998-08-17,Russian Financial Crisis,Russia devalues the ruble and defaults on debt causing global contagion and low demand.,Economic
 1999-03-01,OPEC Production Cuts,OPEC and non-OPEC members agree to cut production to boost lingering low prices.,Policy
 2001-09-11,9/11 Attacks,Terrorist attacks in the US cause immediate volatility and demand uncertainty.,Geopolitical
 2003-03-20,Iraq War Begins,US-led invasion of Iraq causes supply disruption concerns.,Geopolitical
+2005-08-29,Hurricane Katrina,Major hurricane disrupts offshore production and refining in the Gulf of Mexico.,Environmental
 2008-07-11,2008 Price Peak,Oil prices reach all-time high of ~$147 before the financial crisis takes hold.,Economic
 2008-09-15,Lehman Brothers Collapse,Bankruptcy of Lehman Brothers accelerates the Global Financial Crisis and oil price crash.,Economic
 2011-02-15,Arab Spring / Libyan Civil War,Unrest in MENA region particularly Libya disrupts supply and raises prices.,Geopolitical
