@@ -61,7 +61,14 @@ jupyter lab
 
 ## Interactive Dashboard
 
-The project includes an interactive dashboard to visualize the analysis results.
+The project includes a premium interactive dashboard to visualize the analysis results.
+
+### New Features (Updated)
+
+- **Date Range Filters**: Explicitly select start and end dates to focus your analysis on specific time periods.
+- **Event-Change Correlation**: Geopolitical events are now marked directly on the price chart. Events occurring within 30 days of the detected structural change point are highlighted in amber.
+- **Proximity Tracking**: The event table now includes a "Proximity" column, showing exactly how many days separate an event from the detected change point.
+- **Responsive Design**: The dashboard is built with a mobile-first approach using CSS Grid and Flexbox, ensuring it looks great on desktops, tablets, and phones.
 
 ### 1. Generate Results
 
