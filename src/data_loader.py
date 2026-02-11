@@ -13,7 +13,7 @@ def load_data(file_path: str) -> pd.DataFrame:
     """
     try:
         df = pd.read_csv(file_path)
-        df['Date'] = pd.to_datetime(df['Date'], format='%d-%b-%y')
+        df['Date'] = pd.to_datetime(df['Date'], format='mixed', dayfirst=True)
         df = df.sort_values('Date').set_index('Date')
         return df
     except Exception as e:
