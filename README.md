@@ -7,7 +7,11 @@ This project analyzes historical Brent oil prices (1987-2022) to identify signif
 ## Repository Structure
 
 ```
-├── data/                   # Data files (BrentOilPrices.csv, events_data.csv)
+├── data/                   # Data files (BrentOilPrices.csv, events_data.csv, analysis_results.json)
+├── dashboard/              # Interactive Dashboard (Flask + React)
+│   ├── backend/            # Flask API
+│   └── frontend/           # React App
+├── scripts/                # Helper scripts (results generation)
 ├── notebooks/              # Jupyter notebooks for analysis
 │   ├── 01_time_series_properties.ipynb
 │   └── 02_change_point_model.ipynb
@@ -54,3 +58,24 @@ Run the notebooks using Jupyter:
 ```bash
 jupyter lab
 ```
+
+## Interactive Dashboard
+
+The project includes an interactive dashboard to visualize the analysis results.
+
+### 1. Generate Results
+
+Before running the dashboard, ensure the analysis results are generated:
+
+```bash
+python scripts/generate_analysis_results.py
+```
+
+### 2. Run Dashboard
+
+Detailed instructions are available in [dashboard/README.md](dashboard/README.md).
+
+**Quick Start:**
+
+- **Backend**: `cd dashboard/backend && python app.py`
+- **Frontend**: `cd dashboard/frontend && npm run dev`
